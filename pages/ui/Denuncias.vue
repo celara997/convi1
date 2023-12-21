@@ -4,19 +4,42 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/js/index.esm.js";
 import { ref } from "vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
-const checkbox = ref(false);
-const checkbox2 = ref(false);
-const checkbox3 = ref(false);
-const checkbox4 = ref(false);
-const checkbox5 = ref(false);
-const checkbox6 = ref(false);
-const checkbox7 = ref(false);
-const checkbox8 = ref(false);
-const checkbox9 = ref(false);
-const checkbox10 = ref(false);
-const checkbox11 = ref(false);
-const checkbox12 = ref(false);
-const checkbox13 = ref(false);
+import axios from "axios"
+const participantesList= ref([
+  "Alumnos",
+  "Docentes",
+  "Otros funcionarios",
+  "Apoderados",
+  "Otras personas",
+  "No lo tengo claro"
+]);
+const dondeList = ref([
+  "En el colegio",
+  "Fuera del colegio",
+  "En las redes sociales",
+  "En otro lugar"
+]);
+
+const cuandoList = ref([
+  "En una fecha determinada",
+  "Se viene produciendo en reiteradas ocaciones",
+  "No lo tengo claro"
+])
+const participantesValue = ref([]);
+const dondeValue= ref('');
+const cuandoValue = ref('');
+const form = ref({
+  participantes: [],
+  donde: '',
+  cuando: '',
+  relato: '',
+  medidas: '',
+  encargado: ''
+})
+
+const submit = () => {
+  axios.post('/api/denuncia/create',form.value);
+}
 </script>
 
 
@@ -27,178 +50,27 @@ const checkbox13 = ref(false);
       Completa la siguiente información sobre el hecho que quieres denunciar.
     </p>
     <hr class="my-4" />
-
     <v-row>
       <v-col cols="12" md="12">
         <v-row>
           <v-col cols="12" md="4">
-            <UiParentCard title="¿Quiénes participaron?               ">
+            <UiParentCard title="¿Quiénes participaron?">
               <div class="pa-7 pt-1">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    Alumnos
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Docentes
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    checked
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Otros funcionarios
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Apoderados
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Otras personas
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    No lo tengo claro
-                  </label>
-                </div>
+                <OwnSelect type="multiple" v-model="form.participantes" :list="participantesList"></OwnSelect>
               </div>
             </UiParentCard>
           </v-col>
           <v-col cols="12" md="4">
             <UiParentCard title="¿Dónde ocurrió?">
               <div class="pa-7 pt-1">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    En el colegio
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Fuera del colegio
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    En las redes sociales
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    En otro lugar
-                  </label>
-                </div>
+                <OwnOption v-model="form.donde" :list="dondeList"></OwnOption>
               </div>
             </UiParentCard>
           </v-col>
           <v-col cols="12" md="4">
             <UiParentCard title="¿Cuándo ocurrió?">
               <div class="pa-7 pt-1">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    En una fecha determinada
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    Se viene produciendo en reiteradas ocaciones
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckChecked"
-                    
-                  />
-                  <label class="form-check-label" for="flexCheckChecked">
-                    No lo tengo claro
-                  </label>
-                </div>
+                <OwnOption v-model="form.cuando" :list="cuandoList"></OwnOption>
               </div>
             </UiParentCard>
           </v-col>
@@ -210,6 +82,7 @@ const checkbox13 = ref(false);
             >
               <div class="pa-7 pt-1" style="height: 100%">
                 <textarea
+                  v-model="form.relato"
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   rows="6"
@@ -223,6 +96,7 @@ const checkbox13 = ref(false);
             >
               <div class="pa-7 pt-1" style="height: 100%">
                 <textarea
+                  v-model="form.medidas"
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   rows="6"
@@ -241,13 +115,13 @@ const checkbox13 = ref(false);
           al Encargado de Convivencia
         </p>
         <p class="lead">
-          <select class="form-select" aria-label="Default select example">
+          <select v-model="form.encargado" class="form-select" aria-label="Default select example">
             <option selected>Seleccione destinatario..</option>
-            <option value="1">Sebastian Ibarra - Profesor</option>
-            <option value="2">
+            <option value="Sebastian Ibarra - Profesor">Sebastian Ibarra - Profesor</option>
+            <option value="Alvaro Lavin - Encargado de Convivencia Escolar">
               Alvaro Lavin - Encargado de Convivencia Escolar
             </option>
-            <option value="3">Cesar Lara - Profesor</option>
+            <option value="Cesar Lara - Profesor">Cesar Lara - Profesor</option>
           </select>
         </p>
       </v-col>
@@ -257,6 +131,7 @@ const checkbox13 = ref(false);
     <v-row>
       <v-col cols="12" md="7">
         <button
+        @click="submit"
           type="button"
           class="btn btn-success btn-lg float-end"
           data-bs-toggle="modal"
