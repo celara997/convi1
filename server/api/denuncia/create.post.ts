@@ -3,7 +3,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event)
     console.log(body)
     const newelement = new denuncia({...body});
-    newelement.save();
+    await newelement.save();
 
     return `Denuncia creada`
 })
