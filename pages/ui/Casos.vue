@@ -1,6 +1,31 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import "bootstrap/dist/css/bootstrap.css";
+import axios from "axios";
+const denuncias= ref([]);
+onMounted( async () => {
+  const Api = await axios.get('/api/denuncia');
+  Api.data.forEach((element) => {
+    denuncias.value.push(element)
+  });
+})
+
+const formatDate = (fechaInput: string) => {
+  let fecha = new Date(fechaInput);
+
+// Obtiene el día, mes y año
+let dia = fecha.getDate();
+let mes = fecha.toLocaleString('es-ES', { month: 'short' });
+let anio = fecha.getFullYear().toString().substr(-2);
+
+// Obtiene la hora y los minutos
+let hora = fecha.getHours();
+let minutos = fecha.getMinutes();
+
+// Formatea la fecha en el formato deseado
+let fechaFormateada = `${dia}-${mes}-${anio} ${hora}:${minutos}`;
+return fechaFormateada
+}
 </script>
 <template>
   <div class="jumbotron">
@@ -21,29 +46,11 @@ import "bootstrap/dist/css/bootstrap.css";
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Juan Pérez Pérez</td>
-            <td>Apoderado</td>
-            <td>07-ago-23 15:45</td>
-            <td>
-              <a class="btn btn-success btn-xs" href="#" role="button">Ver</a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Juan Pérez Pérez</td>
-            <td>Apoderado</td>
-            <td>07-ago-23 15:45</td>
-            <td>
-              <a class="btn btn-success btn-xs" href="#" role="button">Ver</a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Juan Pérez Pérez</td>
-            <td>Apoderado</td>
-            <td>07-ago-23 15:46</td>
+          <tr v-for="(denuncia, index)  in denuncias">
+            <th scope="row"> {{ index+1 }}</th>
+            <td> {{ denuncia.encargado.nombre }}</td>
+            <td> Apoderado</td>
+            <td> {{ formatDate(denuncia.created_date) }}</td>
             <td>
               <a class="btn btn-success btn-xs" href="/ui/detallecaso" role="button">Ver</a>
             </td>

@@ -1,10 +1,16 @@
 
 <script setup lang="ts">
+interface encargadoI {
+  nombre :String
+  cargo: String
+  _id: String
+}
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/js/index.esm.js";
 import { ref } from "vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
 import axios from "axios"
+
 const participantesList= ref([
   "Alumnos",
   "Docentes",
@@ -25,6 +31,7 @@ const cuandoList = ref([
   "Se viene produciendo en reiteradas ocaciones",
   "No lo tengo claro"
 ])
+const encargados = ref<encargadoI[]>([]);
 const participantesValue = ref([]);
 const dondeValue= ref('');
 const cuandoValue = ref('');
@@ -34,11 +41,16 @@ const form = ref({
   cuando: '',
   relato: '',
   medidas: '',
-  encargado: ''
+  encargado: '0'
 })
-
+onMounted( async () => {
+  const encargadoApi = await axios.get('/api/encargado');
+  encargadoApi.data.forEach((element:encargadoI) => {
+    encargados.value.push({...element})
+  });
+})
 const submit = () => {
-  axios.post('/api/denuncia/create',form.value);
+  axios.post('/api/denuncia',form.value);
 }
 </script>
 
@@ -116,12 +128,10 @@ const submit = () => {
         </p>
         <p class="lead">
           <select v-model="form.encargado" class="form-select" aria-label="Default select example">
-            <option selected>Seleccione destinatario..</option>
-            <option value="Sebastian Ibarra - Profesor">Sebastian Ibarra - Profesor</option>
-            <option value="Alvaro Lavin - Encargado de Convivencia Escolar">
-              Alvaro Lavin - Encargado de Convivencia Escolar
+            <option value="0"> Seleccione destinatario...</option>
+            <option :value="encargado._id"  v-for="(encargado, index)  in encargados"> 
+            {{ encargado.nombre }} - {{ encargado.cargo }}
             </option>
-            <option value="Cesar Lara - Profesor">Cesar Lara - Profesor</option>
           </select>
         </p>
       </v-col>

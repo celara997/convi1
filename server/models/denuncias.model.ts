@@ -22,9 +22,13 @@ const denunciaSchema = new Schema({
     required: true
   },
   encargado:{
-    type:String,
-    required: true
+    type:Schema.Types.ObjectId,
+    ref: "encargado"
   }, 
+  created_date: {
+    type:Date,
+    default: new Date()
+  }
 });
 
 export const denuncia = model("Denuncia", denunciaSchema);
